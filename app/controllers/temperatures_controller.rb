@@ -20,6 +20,12 @@ class TemperaturesController < ApplicationController
     @temperature = Temperature.new(temperature_params)
     Temperature.add(pi_name: @temperature.pi_name, reading: @temperature.reading)
 
+    if TemperatureService.max_temperature_reach?
+      FanService.start_fans
+    else
+      FanService.stop_fans
+    end
+
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
       format.json { head :created }
