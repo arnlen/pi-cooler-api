@@ -17,4 +17,10 @@ class Temperature < ApplicationRecord
     $temperatures[pi_name.to_sym].push(reading)
   end
 
+  def self.last_for_each
+    $temperatures.collect do |temperature|
+      temperature.last
+    end
+  end
+
 end
