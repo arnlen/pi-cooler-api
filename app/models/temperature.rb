@@ -6,6 +6,8 @@ class Temperature < ApplicationRecord
 
   def self.add(pi_name:, reading:)
     $temperatures[pi_name.to_sym].push(reading)
+
+    $temperatures[pi_name.to_sym].shift if $temperatures[pi_name.to_sym].size > 50
   end
 
   def self.last_readings

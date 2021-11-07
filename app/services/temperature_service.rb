@@ -11,5 +11,6 @@ class TemperatureService
 
   attr_reader :max_temperature
 
-  $max_temperature = 40
+  # TODO: extract this to config file
+  $max_temperature = 60
 end
