@@ -5,22 +5,18 @@
 <table>
   <thead>
     <tr>
-      <th>Pi name</th>
-      <th>Reading</th>
-      <th colspan="3"></th>
+      <% @temperatures.keys.each do |key| %>
+        <th><%= key %></th>
+      <% end %>
     </tr>
   </thead>
 
   <tbody>
-    <% @temperatures.each do |temperature| %>
-      <tr>
-        <td><%= temperature.pi_name %></td>
-        <td><%= temperature.reading %></td>
-        <td><%= link_to 'Show', temperature %></td>
-        <td><%= link_to 'Edit', edit_temperature_path(temperature) %></td>
-        <td><%= link_to 'Destroy', temperature, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+    <tr>
+      <% @temperatures.each do |temperature| %>
+        <td><%= temperature[1] %></td>
+      <% end %>
+    </tr>
   </tbody>
 </table>
 
