@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Pi name:</strong>
+  <%= @temperature.pi_name %>
+</p>
+
+<p>
+  <strong>Reading:</strong>
+  <%= @temperature.reading %>
+</p>
+
+<%= link_to 'Edit', edit_temperature_path(@temperature) %> |
+<%= link_to 'Back', temperatures_path %>
