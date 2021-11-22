@@ -1,32 +1,22 @@
 class Temperature < ApplicationRecord
 
+  @@temperatures = {}
+
   def self.all
-    $temperatures
+    @@temperatures
   end
 
   def self.add(pi_name:, reading:)
-    $temperatures[pi_name.to_sym].push(reading)
+    @@temperatures[pi_name.to_sym] = [] unless @@temperatures[pi_name.to_sym]
+    @@temperatures[pi_name.to_sym].push(reading)
 
-    $temperatures[pi_name.to_sym].shift if $temperatures[pi_name.to_sym].size > 50
+    @@temperatures[pi_name.to_sym].shift if @@temperatures[pi_name.to_sym].size > 50
   end
 
   def self.last_readings
-    $temperatures.values.collect do |temperature|
+    @@temperatures.values.collect do |temperature|
       temperature.last
     end.compact
   end
-
-  private
-
-  attr_reader :temperatures
-
-  $temperatures = {
-    cooler: [],
-    router: [],
-    compute_1: [],
-    compute_2: [],
-    compute_3: [],
-    compute_4: [],
-  }
 
 end
