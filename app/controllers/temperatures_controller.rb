@@ -26,7 +26,7 @@ class TemperaturesController < ApplicationController
       FanService.stop_fans
     end
 
-    pp Temperature.all
+    puts Temperature.all
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
