@@ -26,7 +26,14 @@ class TemperaturesController < ApplicationController
       FanService.stop_fans
     end
 
-    puts Temperature.all
+    Temperature.all.each do |pi_name, reading|
+      last_reading = Temperature.all[pi_name].last
+      hot_flag = "🌡" if last_reading.to_i > 70
+
+      puts "[#{pi_name}] #{last_reading}°C #{hot_flag}"
+    end
+
+    Temperature.all.each_key { |k| puts "[#{k}] #{Temperature.all[k].last}°C #{'🌡' if Temperature.all[k].last.to_i > 70}" }
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
