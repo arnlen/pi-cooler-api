@@ -15,18 +15,6 @@ if len(sys.argv) > 1:
 if len(sys.argv) > 2:
     message2 = sys.argv[2]
 
-def getIp(interface):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    return socket.inet_ntoa(fcntl.ioctl(
-        s.fileno(),
-        0x8915,
-        struct.pack('256s', interface[:15])
-    )[20:24])
-
-if message1 == "ip":
-    message1 = "Alpha IP:"
-    message2 = getIp('wlan0') # For Ethernet, switch to: getIp('eth0')
-
 print('message 1:', message1)
 print("message 2:", message2)
 

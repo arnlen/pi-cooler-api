@@ -20,11 +20,7 @@ class TemperaturesController < ApplicationController
     @temperature = Temperature.new(temperature_params)
     Temperature.add(pi_name: @temperature.pi_name, reading: @temperature.reading)
 
-    if TemperatureService.max_temperature_reach?
-      FanService.start_fans
-    else
-      FanService.stop_fans
-    end
+    LCDService.display("#{@temperature.pi_name}: #{@temperature.reading}")
 
     Temperature.all.each do |pi_name, reading|
       last_reading = Temperature.all[pi_name].last
