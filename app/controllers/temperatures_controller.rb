@@ -28,7 +28,7 @@ class TemperaturesController < ApplicationController
 
     Temperature.all.each do |pi_name, reading|
       last_reading = Temperature.all[pi_name].last
-      hot_flag = "🌡" if last_reading.to_i >= 70
+      hot_flag = "🌡" if last_reading.to_i >= TemperatureService.max_temperature
 
       puts "[#{pi_name}] #{last_reading}°C #{hot_flag}"
     end
