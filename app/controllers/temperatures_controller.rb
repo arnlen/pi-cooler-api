@@ -27,7 +27,7 @@ class TemperaturesController < ApplicationController
       puts "[#{pi_name}] #{last_reading}°C #{hot_flag}"
     end
 
-    LCDService.display(@temperature.pi_name, @temperature.reading)
+    LcdService.display(@temperature.pi_name, @temperature.reading)
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
