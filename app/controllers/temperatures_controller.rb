@@ -20,14 +20,14 @@ class TemperaturesController < ApplicationController
     @temperature = Temperature.new(temperature_params)
     Temperature.add(pi_name: @temperature.pi_name, reading: @temperature.reading)
 
-    LCDService.display("#{@temperature.pi_name}: #{@temperature.reading}")
-
     Temperature.all.each do |pi_name, reading|
       last_reading = Temperature.all[pi_name].last
       hot_flag = "🌡" if last_reading.to_i >= TemperatureService.max_temperature
 
       puts "[#{pi_name}] #{last_reading}°C #{hot_flag}"
     end
+
+    LCDService.display(@temperature.pi_name, @temperature.reading)
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
