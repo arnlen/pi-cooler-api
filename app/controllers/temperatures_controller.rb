@@ -6,28 +6,11 @@ class TemperaturesController < ApplicationController
     @temperatures = Temperature.all
   end
 
-  # GET /temperatures/1 or /temperatures/1.json
-  def show
-  end
-
-  # GET /temperatures/new
-  def new
-    @temperature = Temperature.new
-  end
-
   # POST /temperatures or /temperatures.json
   def create
-    @temperature = Temperature.new(temperature_params)
-    Temperature.add(pi_name: @temperature.pi_name, reading: @temperature.reading)
+    @temperature = Temperature.new(pi_name: params[:pi_name], reading: params[:reading])
 
-    Temperature.all.each do |pi_name, reading|
-      last_reading = Temperature.all[pi_name].last
-      hot_flag = "🌡" if last_reading.to_i >= TemperatureService.max_temperature
-
-      puts "[#{pi_name}] #{last_reading}°C #{hot_flag}"
-    end
-
-    LcdService.display(@temperature.pi_name, @temperature.reading)
+    LcdService.refresh_readings if LcdService.should_update_display?
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }

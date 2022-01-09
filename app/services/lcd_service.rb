@@ -1,35 +1,38 @@
 class LcdService
 
-  @@dlist = []
+  @@last_display_updated_at = DateTime.now
 
-  def self.display(pi_name, temperature_reading)
-    self.add_to_list(pi_name, temperature_reading.to_i)
-    self.sanitize_display
-    puts @@dlist
-    argv = "\"#{@@dlist[0][:pi_short_name]} #{@@dlist[0][:temperature]}  #{@@dlist[1][:pi_short_name] if @@dlist[1]} #{@@dlist[1][:temperature] if @@dlist[1]}\" \"#{@@dlist[2][:pi_short_name] if @@dlist[2]} #{@@dlist[2][:temperature] if @@dlist[2]}  #{@@dlist[3][:pi_short_name] if @@dlist[3]} #{@@dlist[3][:temperature] if @@dlist[3]}\""
-    puts "argv: #{argv}"
+  def self.last_display_updated_at
+    @@last_display_updated_at
+  end
+
+  def self.should_update_display?
+    @@last_display_updated_at < 2.minutes.ago
+  end
+
+  def self.refresh_readings
+    puts "Refreshing display..."
+
+    readings = Temperature.last_temperatures_per_pi.collect do |last_temperature|
+      {
+        pi_short_name: last_temperature.pi_short_name,
+        reading: last_temperature.reading
+      }
+    end
+
+    positions = readings.each_with_index.collect do |reading, index|
+      "#{readings[index][:pi_short_name]} #{readings[index][:reading]}"
+    end
+
+    first_line = "#{positions[0]} #{positions[1]}"
+    second_line = "#{positions[2]} #{positions[3]}"
+
+    argv = "\"#{first_line}\" \"#{second_line}\""
+    puts "Screen will be refresh to: #{argv}"
+
     `python3 lib/lcd_scripts/display_two_messages.py #{argv}`
-  end
 
-  def self.add_to_list(pi_name, temperature)
-    if index = @@dlist.index { |previous_record| previous_record[:pi_name] == pi_name }
-      @@dlist[index][:temperature] = temperature
-      @@dlist[index][:last_updated_at] = DateTime.now
-    else
-      @@dlist.push({
-        pi_name: pi_name,
-        pi_short_name: pi_name[0..3].capitalize,
-        temperature: temperature,
-        last_updated_at: DateTime.now
-      })
-    end
-  end
-
-  def self.sanitize_display
-    if index = @@dlist.index { |previous_record| previous_record[:last_updated_at] < DateTime.now - 1.0/(24*60) }
-      deleted = @@dlist.delete_at(index)
-      puts "Too old reading removed from display: #{deleted}"
-    end
+    @@last_display_updated_at = DateTime.now
   end
 
 end
