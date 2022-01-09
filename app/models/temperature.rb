@@ -7,7 +7,7 @@ class Temperature
                 :reading,
                 :created_at
 
-  def initialize(pi_name, reading)
+  def initialize(pi_name:, reading:)
     @pi_name = pi_name
     @pi_short_name = pi_name[0..3].capitalize
     @reading = reading

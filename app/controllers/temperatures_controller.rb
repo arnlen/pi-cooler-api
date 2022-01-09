@@ -7,8 +7,12 @@ class TemperaturesController < ApplicationController
   end
 
   # POST /temperatures or /temperatures.json
+  # Params: {"temperature"=>{"pi_name"=>"alphapi", "reading"=>49.1}}
   def create
-    @temperature = Temperature.new(pi_name: params[:pi_name], reading: params[:reading])
+    @temperature = Temperature.new(
+      pi_name: temperature_params["pi_name"],
+      reading: temperature_params["reading"]
+    )
 
     LcdService.refresh_readings if LcdService.should_update_display?
 
