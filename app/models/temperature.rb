@@ -37,7 +37,7 @@ class Temperature
     @@temperatures.each_with_index do |record, index|
       if record.created_at < DateTime.now - 1.0/(24*60)
         deleted = @@temperatures.delete_at(index)
-        puts "Too old reading removed from database: #{deleted}"
+        puts "🗑 Too old reading removed from database: #{deleted}"
       end
     end
   end
