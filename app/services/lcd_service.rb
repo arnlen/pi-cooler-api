@@ -7,7 +7,7 @@ class LcdService
   end
 
   def self.should_update_display?
-    @@last_display_updated_at < 2.minutes.ago
+    @@last_display_updated_at < 30.seconds.ago
   end
 
   def self.refresh_readings
@@ -20,14 +20,22 @@ class LcdService
       }
     end
 
+    puts "Readings: #{readings}"
+
     positions = readings.each_with_index.collect do |reading, index|
       "#{readings[index][:pi_short_name]} #{readings[index][:reading]}"
     end
 
+    puts "Positions: #{positions}"
+
     first_line = "#{positions[0]} #{positions[1]}"
     second_line = "#{positions[2]} #{positions[3]}"
 
+    puts "First line: #{first_line}"
+    puts "Second line: #{second_line}"
+
     argv = "\"#{first_line}\" \"#{second_line}\""
+
     puts "Screen will be refresh to: #{argv}"
 
     `python3 lib/lcd_scripts/display_two_messages.py #{argv}`

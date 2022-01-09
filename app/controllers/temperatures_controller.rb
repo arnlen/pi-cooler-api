@@ -14,6 +14,8 @@ class TemperaturesController < ApplicationController
       reading: temperature_params["reading"]
     )
 
+    @temperature.save
+
     LcdService.refresh_readings if LcdService.should_update_display?
 
     respond_to do |format|
