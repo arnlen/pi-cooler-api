@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  pi_name: MyString
-  reading: 1.5
-
-two:
-  pi_name: MyString
-  reading: 1.5

@@ -21,7 +21,6 @@ class TemperaturesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }
       format.json { head :created }
     end
   end
