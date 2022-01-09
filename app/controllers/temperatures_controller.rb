@@ -16,7 +16,9 @@ class TemperaturesController < ApplicationController
 
     @temperature.save
 
-    LcdService.refresh_readings if LcdService.should_update_display?
+    if LcdService.should_update_display? && !LcdService.refresh_already_in_progress?
+      LcdService.refresh_readings
+    end
 
     respond_to do |format|
       format.html { redirect_to temperatures_path, notice: "Temperature was successfully created." }

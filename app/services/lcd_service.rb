@@ -1,13 +1,21 @@
 class LcdService
 
   @@display_last_updated_at = DateTime.now
+  @@refresh_in_progress = false
 
   def self.should_update_display?
     puts "Display last updated at: #{@@display_last_updated_at}"
     @@display_last_updated_at < 30.seconds.ago
   end
 
+  def self.refresh_already_in_progress?
+    "Refresh already in progress. Waiting..." if @@refresh_in_progress
+    @@refresh_in_progress
+  end
+
   def self.refresh_readings
+    # Lock to prevent concurrent access to LCD
+    @@refresh_in_progress = true
     puts "Refreshing display..."
 
     readings = LcdService.get_readings
@@ -27,6 +35,7 @@ class LcdService
     LcdService.display_two_messages_to_screen(argv)
 
     @@display_last_updated_at = DateTime.now
+    @@refresh_in_progress = false # Unlock screen access
   end
 
   def self.display_two_messages_to_screen(argv)
