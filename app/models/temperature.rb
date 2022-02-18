@@ -2,6 +2,8 @@ class Temperature
 
   @@temperatures = []
 
+  $reading_ttl = 3.minutes
+
   attr_accessor :pi_name,
                 :pi_short_name,
                 :reading,
@@ -35,7 +37,7 @@ class Temperature
 
   def self.sanitize_database
     @@temperatures.each_with_index do |record, index|
-      if record.created_at < DateTime.now - 1.0/(24*60)
+      if record.created_at < $reading_ttl.ago
         deleted = @@temperatures.delete_at(index)
         puts "🗑  Too old reading removed from database: #{deleted}"
       end

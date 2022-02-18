@@ -2,10 +2,11 @@ class LcdService
 
   @@display_last_updated_at = DateTime.now
   @@refresh_in_progress = false
+  $refresh_screen_every = 2.minutes
 
   def self.should_update_display?
     puts "🕰  Display last updated at: #{@@display_last_updated_at}"
-    should_update_display = @@display_last_updated_at < 2.minutes.ago
+    should_update_display = @@display_last_updated_at < $refresh_screen_every.ago
     puts "💤 No refresh required." unless should_update_display
     should_update_display
   end
